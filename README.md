@@ -1,6 +1,6 @@
 # The SQL style guide
 
-The goal of this style guide is to improve the readability of SQL queries.
+The goal of this style guide is to improve the readability, quality, performance, and consistency of SQL queries.
 
 ## Formatting
 
