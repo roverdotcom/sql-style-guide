@@ -56,6 +56,76 @@ The goal of this style guide is to improve the readability of SQL queries.
     WHERE 1;
     ```
 
+## Common Table Expressions (CTEs)
+
+[From AWS](http://docs.aws.amazon.com/redshift/latest/dg/r_WITH_clause.html):
+
+>`WITH` clause subqueries are an efficient way of defining tables that can be used throughout the execution of a single query. In all cases, the same results can be achieved by using subqueries in the main body of the `SELECT` statement, but `WITH` clause subqueries may be simpler to write and read.
+
+The body of a CTE must be one indent further than the `WITH` keyword. Open them at the end of a line and close them on a new line:
+
+```sql
+WITH backings_per_category AS (
+  SELECT
+    category_id,
+    deadline,
+    ...
+)
+```
+
+Multiple CTEs should be formatted accordingly:
+
+```sql
+WITH backings_per_category AS (
+  SELECT
+    ...
+), backers AS (
+  SELECT
+    ...
+), backers_and_creators AS (
+  ...
+)
+SELECT * FROM backers;
+```
+
+If possible, `JOIN` CTEs inside subsequent CTEs, not in the main clause:
+
+__GOOD__:
+
+```sql
+WITH backings_per_category AS (
+  SELECT
+    ...
+), backers AS (
+  SELECT
+    backer_id,
+    COUNT(backings_per_category.id) AS projects_backed_per_category
+  INNER JOIN ksr.users AS users ON users.id = backings_per_category.backer_id
+), backers_and_creators AS (
+  ...
+)
+SELECT * FROM backers_and_creators;
+```
+
+__BAD__:
+
+```sql
+WITH backings_per_category AS (
+  SELECT
+    ...
+), backers AS (
+  SELECT
+    backer_id,
+    COUNT(backings_per_category.id) AS projects_backed_per_category
+), backers_and_creators AS (
+  ...
+)
+SELECT * FROM backers_and_creators
+INNER JOIN backers ON backers_and_creators ON backers.backer_id = backers_and_creators.backer_id
+```
+
+Always use CTEs over inlined subqueries.
+
 * Subqueries should be aligned as though the open parenthesis were the 0-column
   So, they should be indented as a unit, to identify them as subqueries.  They should continue to have the opening keywords right-aligned.
 
