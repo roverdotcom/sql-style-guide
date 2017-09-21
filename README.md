@@ -19,6 +19,8 @@ The goal of this style guide is to improve the readability of SQL queries.
 ### Names
 * Named objects should not be surrounded by backticks, no matter what MySQL says when it dumps the table structure for you.
   *  If you need to use backticks because of something in your table name, rename your table.
+* Table names are singular.
+* Avoid tables and columns named with reserved SQL keywords.
 
 ### Indentation and newlines
 
