@@ -167,31 +167,3 @@ Always use CTEs over inlined subqueries.
 
 * Tiny names for table aliases can sometimes work as abbreviations.
   As an example, if "releases" is referenced frequently, it might make sense to abbreviate it "r".  However, "rel" is almost as short, and much more descriptive.  Have a good reason for "r" instead of "rel".
-
-* Subquery aliases should be even more descriptive.
-  Subqueries effectively create ad-hoc tables in memory.  As such, if you name it "x", then there's absolutely nothing to suggest the intention behind the table to a later maintainer.
-  
-  ```SQL
-  /* Good */
-  SELECT *
-    FROM (SELECT table1.id AS child, 
-                 table2.id AS parent
-            FROM table1
-            JOIN table2 ON (table2.parent_id = table1.id) ) parentage;
-
-  /* Bad */
-  SELECT *
-    FROM (SELECT table1.id AS child, 
-                 table2.id AS parent
-            FROM table1
-            JOIN table2 ON (table2.parent_id = table1.id) ) x;
-
-  /* Bad */
-  SELECT *
-    FROM (SELECT table1.id AS child, 
-                 table2.id AS parent
-            FROM table1
-            JOIN table2 ON (table2.parent_id = table1.id) ) link;
-  ```
-
-  *  Abbreviations don't help in subquery aliases
